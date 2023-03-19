@@ -1,0 +1,25 @@
+{% extends 'base.html' %} {% block content %}
+
+    <div class="w3-panel w3-border w3-round-xlarge w3-center w3-border-red w3-pale-red w3-display-middle">
+        <h2><b class="w3-allerta">Login</b></h2>
+
+    <form action=/verify method=post>
+        <p>Username:</p>
+        <input name=username> <br>
+        <p>Password:</p>
+        <input name=password type=password> <br>
+        <p>
+        <input type=submit value="Submit" onclick=update()>
+            <script>
+                function update(){
+                    alert("Welcome to TheOfficialChatForum!")
+                }
+            </script>
+        </p>
+    </form>
+
+    <p>Haven't made an account yet? <a href="/">Sign-Up Here!</a></p>
+    </div>
+
+
+{% endblock %}
