@@ -3,9 +3,9 @@ from flask_socketio import join_room, leave_room, send, SocketIO
 import random
 from string import ascii_uppercase
 
-app = Flask(__name__)
-app.config["SECRET_KEY"] = "ylgyghglhg"
-socketio = SocketIO(app)
+main = Flask(__name__)
+main.config["SECRET_KEY"] = "ylgyghglhg"
+socketio = SocketIO(main)
 
 rooms={}
 
@@ -19,30 +19,30 @@ def generate_unique_code(length):
             break
     return code
 
-@app.route('/')
+@main.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/TheOfficialChatForum')
+@main.route('/homepage')
 def chatforum():
     return render_template('Home.html')
 
-@app.route('/about')
+@main.route('/about')
 def about():
     return render_template('About.html')
 
-@app.route('/signup', methods=['POST'])
+@main.route('/signup', methods=['POST'])
 def signup():
     f = open("user.txt", "w")
     f.write(request.form['username'] + ',' + request.form['password'])
     f.close()
     return render_template('login.html')
 
-@app.route('/login')
+@main.route('/login')
 def login():
      return render_template('login.html')
 
-@app.route('/verify', methods=['POST'])
+@main.route('/verify', methods=['POST'])
 def verify():
     f = open("user.txt", "r")
     file = f.read()
@@ -52,9 +52,9 @@ def verify():
     elif request.form['username'] == split[0] and request.form['password'] == split[1]:
         return render_template('Home.html')
 
-# LiveChat stuff starts here
+# LiveChat stuff below
 
-@app.route("/LiveChat", methods=["POST", "GET"])
+@main.route("/LiveChat", methods=["POST", "GET"])
 def live():
     session.clear()
     if request.method == "POST":
@@ -82,7 +82,7 @@ def live():
 
     return render_template("Live.html")
 
-@app.route("/room")
+@main.route("/room")
 def room():
     room = session.get("room")
     if room is None or session.get("name") is None or room not in rooms:
@@ -133,5 +133,5 @@ def disconnect():
     send({"name": name, "message": "has left the room"}, to=room)
     print(f"{name} has left the room {room}")
 
-if __name__ == "__app__":
-    socketio.run(app, debug=True)
+if __name__ == "__main__":
+    socketio.run(main, debug=True)
