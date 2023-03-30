@@ -1,7 +1,32 @@
-{% extends 'base.html' %} {% block content %}
+<html lang="en">
+    <head>
 
+        <meta charset="UTF-8">
+        <title>ChattyVerse</title>
+        <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Allerta+Stencil">
+        <style>
+            .w3-allerta {
+              font-family: "Allerta Stencil", Sans-serif;
+            }
+        </style>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+            integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+            crossorigin="anonymous"
+        ></script>
+    </head>
+
+<body class="w3-pale-blue">
     <div class="w3-panel w3-border w3-round-xlarge w3-center w3-border-red w3-pale-red w3-display-middle">
-        <h2><b class="w3-allerta">Login</b></h2>
+        <h2><b class="w3-allerta">
+            <div class="w3-xlarge">
+                <img src="https://www.pngarts.com/files/2/Letter-Z-PNG-Image-With-Transparent-Background.png" width="50" height="50">
+                ChattyVerse
+            </div>
+        </b></h2>
 
     <form action=/verify method=post>
         <p>Username:</p>
@@ -20,6 +45,4 @@
 
     <p>Haven't made an account yet? <a href="/">Sign-Up Here!</a></p>
     </div>
-
-
-{% endblock %}
+<body>
