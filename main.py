@@ -27,10 +27,6 @@ def home():
 def chatforum():
     return render_template('Home.html')
 
-@main.route('/about')
-def about():
-    return render_template('About.html')
-
 @main.route('/signup', methods=['POST'])
 def signup():
     f = open("user.txt", "w")
