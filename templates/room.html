@@ -1,4 +1,27 @@
-{% extends 'base.html' %} {% block content %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>ChattyVerse</title>
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+            integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+            crossorigin="anonymous"
+        ></script>
+    </head>
+    
+    <body class="w3-lightgray">
+
+    <div class="w3-top">
+      <div class="w3-bar w3-gray w3-wide w3-padding w3-card">
+          <a href="/homepage" class="w3-bar-item w3-button"><b>DZ</b> ChattyVerse</a>
+      </div>
+      </div>
+
+
+<div class="content w3-container w3-display-middle">
+
 <div class="message-box">
   <h2>Chat Room: {{code}}</h2>
   <div class="messages" id="messages"></div>
@@ -49,4 +72,9 @@
 <script type="text/javascript">
   createMessage("{{msg.name}}", "{{msg.message}}");
 </script>
-{% endfor %} {% endblock %}
+{% endfor %}
+
+</div>
+
+</body>
+</html>
