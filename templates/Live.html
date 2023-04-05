@@ -1,6 +1,22 @@
-{% extends 'base.html' %} {% block content %}
+<html>
+<head>
+    <title>ChattyVerse</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+
+<body class="w3-lightgray">
+
+<div class="w3-top">
+<div class="w3-bar w3-gray w3-wide w3-padding w3-card">
+    <a href="/homepage" class="w3-bar-item w3-button"><b>DZ</b> ChattyVerse</a>
+</div>
+</div>
+
 <div class= "w3-left">
-<div class="w3-panel w3-border w3-round-xlarge w3-border-black w3-pale-gray w3-display-middle">
+<div class="w3-panel w3-border w3-round-xlarge w3-border-black w3-light-gray w3-display-middle">
 <form method="post" class="buttons">
     <h3>Enter The Chat Room</h3>
     <div>
@@ -25,4 +41,6 @@
 </form>
 </div>
 </div>
-{% endblock %}
+
+</body>
+</html>
