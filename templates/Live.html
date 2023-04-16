@@ -1,4 +1,5 @@
-<html>
+<html lang="en">
+<!-- Header starts here -->
 <head>
     <title>ChattyVerse</title>
     <meta charset="UTF-8">
@@ -6,41 +7,51 @@
     <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
+<!-- Header ends here -->
 
+<!-- Body starts here -->
 <body class="w3-lightgray">
 
-<div class="w3-top">
-<div class="w3-bar w3-gray w3-wide w3-padding w3-card">
-    <a href="/homepage" class="w3-bar-item w3-button"><b>DZ</b> ChattyVerse</a>
-</div>
-</div>
+    <!-- Top Bar stuff starts here -->
+    <div class="w3-top">
+        <div class="w3-bar w3-gray w3-wide w3-padding w3-card">
+            <a href="/homepage" class="w3-bar-item w3-button"><b>DZ</b> ChattyVerse</a>
+        </div>
+    </div>
+    <!-- Top Bar stuff ends here -->
 
-<div class= "w3-left">
-<div class="w3-panel w3-border w3-round-xlarge w3-border-black w3-light-gray w3-display-middle">
-<form method="post" class="buttons">
-    <h3>Enter The Chat Room</h3>
-    <div>
-        <label>Name:</label>
-        <input
-            type="text"
-            placeholder="Pick a name!"
-            name="name"
-            value="{{name}}"
-        />
+    <div class= "w3-left">
+    <div class="w3-panel w3-border w3-round-xlarge w3-border-black w3-light-gray w3-display-middle"> <!-- Border Stuff -->
+        <form method="post" class="buttons">
+            <h3>Enter The Chat Room</h3><!-- Title -->
+            <div>
+                <label>Name:</label>    <!-- Choosing Name Stuff starts here -->
+                <input
+                    type="text"
+                    placeholder="Pick a name!"
+                    name="name"
+                    value="{{name}}"
+                />
+            </div>  <!-- Choosing Name Stuff ends here -->
+
+            <div class="join"> <!-- Joining with specific room code stuff starts here -->
+                <input type="text" placeholder="Room Code" name="code" value="{{code}}"/>
+                <button type="submit" name="join">Join a room</button>
+            </div> <!-- Joining with specific room code stuff ends here -->
+
+            <button type="submit" name="create" class="create-btn">Create a room</button> <!-- Creating room stuff -->
+
+            <!-- if error creating room -->
+            {% if error %}
+            <ul>
+                <li>{{error}}</li>
+            </ul>
+            {% endif %}
+
+        </form>
     </div>
-    <div class="join">
-        <input type="text" placeholder="Room Code" name="code" value="{{code}}"/>
-        <button type="submit" name="join">Join a room</button>
     </div>
-    <button type="submit" name="create" class="create-btn">Create a room</button>
-    {% if error %}
-    <ul>
-        <li>{{error}}</li>
-    </ul>
-    {% endif %}
-</form>
-</div>
-</div>
 
 </body>
+<!-- Body ends here -->
 </html>
