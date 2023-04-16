@@ -7,8 +7,9 @@ main = Flask(__name__)
 main.config["SECRET_KEY"] = "ylgyghglhg"
 socketio = SocketIO(main)
 
-rooms={}
+rooms={} # Where created rooms go
 
+# Room Code Generator start
 def generate_unique_code(length):
     while True:
         code= ""
@@ -18,14 +19,18 @@ def generate_unique_code(length):
         if code not in rooms:
             break
     return code
+# Room Code Generator end
 
-@main.route('/')
-def home():
-    return render_template('index.html')
-
+# Homepage stuff start
 @main.route('/homepage')
 def chatforum():
     return render_template('Home.html')
+# Homepage stuff end
+
+# Sign-up and login stuff start
+@main.route('/')
+def home():
+    return render_template('index.html')
 
 @main.route('/signup', methods=['POST'])
 def signup():
@@ -47,9 +52,9 @@ def verify():
         return 'Username or Password Incorrect'
     elif request.form['username'] == split[0] and request.form['password'] == split[1]:
         return render_template('Home.html')
+# Sign-up and login stuff end
 
-# LiveChat stuff below
-
+# Chat Stuff Start
 @main.route("/LiveChat", methods=["POST", "GET"])
 def live():
     session.clear()
@@ -128,6 +133,7 @@ def disconnect():
 
     send({"name": name, "message": "has left the room"}, to=room)
     print(f"{name} has left the room {room}")
+# Chat Stuff End
 
 if __name__ == "__main__":
     socketio.run(main, debug=True)
