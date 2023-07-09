@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import join_room, leave_room, send, SocketIO
+import sqlite3
 import random
 from string import ascii_uppercase
 
-main = Flask(__name__)
-main.config["SECRET_KEY"] = "ylgyghglhg"
-socketio = SocketIO(main)
+app = Flask(__name__)
+app.config["SECRET_KEY"] = "ylgyghglhg"
+socketio = SocketIO(app)
 
 rooms={} # Where created rooms go
 
@@ -22,40 +23,83 @@ def generate_unique_code(length):
 # Room Code Generator end
 
 # Homepage stuff start
-@main.route('/homepage')
+@app.route('/homepage')
 def chatforum():
-    return render_template('Home.html')
+    if 'username' in session:
+        username = session['username']
+    else:
+        username = "not logged in"
+        return render_template('index.html', username=username)
+    return render_template('home.html', username=username)
+
 # Homepage stuff end
 
 # Sign-up and login stuff start
-@main.route('/')
-def home():
+@app.route('/')
+def signup():
     return render_template('index.html')
 
-@main.route('/signup', methods=['POST'])
-def signup():
-    f = open("user.txt", "w")
-    f.write(request.form['username'] + ',' + request.form['password'])
-    f.close()
+@app.route('/login')
+def login():
     return render_template('login.html')
 
-@main.route('/login')
-def login():
-     return render_template('login.html')
+@app.route('/tbl')
+def tbl():
+    con = sqlite3.connect('logindatabase.db')
+    cur = con.cursor()
+    cur.execute("""
+    CREATE TABLE login
+    (
+    username VARCHAR(20) NOT NULL PRIMARY KEY,
+    password VARCHAR(20) NOT NULL
+    )
+    """)
+    return "table created!"
 
-@main.route('/verify', methods=['POST'])
-def verify():
-    f = open("user.txt", "r")
-    file = f.read()
-    split = file.split(',')
-    if request.form['username'] != split[0] and request.form['password'] == split[1]:
-        return 'Username or Password Incorrect'
-    elif request.form['username'] == split[0] and request.form['password'] == split[1]:
-        return render_template('Home.html')
+@app.route('/logout')
+def logout():
+    session.pop('username')
+    return redirect('/homepage')
+
+@app.route('/select', methods=['POST'])
+def select():
+    con = sqlite3.connect('logindatabase.db')
+    cur = con.cursor()
+    cur.execute(""" SELECT * FROM login
+                    WHERE username = ? AND password = ? """,
+                    (request.form['username'], request.form['password']))
+    rows = cur.fetchall()
+    if len(rows) == 1:
+        session['username'] = request.form['username']
+        return redirect('/homepage')
+    else:
+        return "Login not recognised"
+
+@app.route('/insert', methods=['POST'])
+def insert():
+    con = sqlite3.connect('logindatabase.db')
+    cur = con.cursor()
+    cur.execute("""
+    INSERT INTO login (username, password)
+    VALUES (?,?)""",
+    (request.form['username'], request.form['password']))
+    con.commit()
+    return redirect('/select')
+
+@app.route('/zia')
+def zia():
+    con = sqlite3.connect('logindatabase.db')
+    cur = con.cursor()
+    cur.execute("""
+    INSERT INTO login (username, password)
+    VALUES ("zia", "123")
+    """)
+    con.commit()
+    return "zia added!"
 # Sign-up and login stuff end
 
 # Chat Stuff Start
-@main.route("/LiveChat", methods=["POST", "GET"])
+@app.route("/LiveChat", methods=["POST", "GET"])
 def live():
     session.clear()
     if request.method == "POST":
@@ -65,25 +109,25 @@ def live():
         create = request.form.get("create", False)
 
         if not name:
-            return render_template("Live.html", error="Please enter a name.", code=code, name=name)
+            return render_template("live.html", error="Please enter a name.", code=code, name=name)
 
         if join != False and not code:
-            return render_template("Live.html", error="Please enter a room code.", code=code, name=name)
+            return render_template("live.html", error="Please enter a room code.", code=code, name=name)
 
         room=code
         if create != False:
             room = generate_unique_code(4)
             rooms[room] = {"members": 0, "messages": []}
         elif code not in rooms:
-            return render_template("Live.html", error="Room does not exist.", code=code, name=name)
+            return render_template("live.html", error="Room does not exist.", code=code, name=name)
 
         session["room"] = room
         session["name"] = name
         return redirect(url_for("room"))
 
-    return render_template("Live.html")
+    return render_template("live.html")
 
-@main.route("/room")
+@app.route("/room")
 def room():
     room = session.get("room")
     if room is None or session.get("name") is None or room not in rooms:
@@ -129,11 +173,12 @@ def disconnect():
     if room in rooms:
         rooms[room]["members"] -= 1
         if rooms[room]["members"] <= 0:
-            del rooms[room]
+           del rooms[room]
+           send({"name": name, "message": "has deleted the room"}, to=room)
 
     send({"name": name, "message": "has left the room"}, to=room)
     print(f"{name} has left the room {room}")
 # Chat Stuff End
 
 if __name__ == "__main__":
-    socketio.run(main, debug=True)
+    socketio.run(app, debug=True)
