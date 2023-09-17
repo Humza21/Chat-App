@@ -10,80 +10,108 @@
       integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
       crossorigin="anonymous"
     ></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-dark-grey.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style> html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif} </style>
+    <style>
+      .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: red;
+        color: white;
+        text-align: center;
+      }
+      </style>
   </head>
   <!-- Header ends here -->
 
-  <!-- Body starts here -->
-  <body class="w3-lightgray">
+ <!-- Start of HTML Body -->
+ <body class="w3-theme-l5">
 
-    <!-- Top Bar stuff starts here -->
-    <div class="w3-top">
-      <div class="w3-bar w3-gray w3-wide w3-padding w3-card">
-        <a href="/homepage" class="w3-bar-item w3-button"><b>DZ</b> ChattyVerse</a>
-      </div>
-      </div>
-    <!-- Top Bar stuff ends here -->
-
-    <div class="content w3-container w3-display-middle">  <!-- Content Div -->
-
-    <!-- Actual Chat stuff starts here -->
-    <div class="message-box">
-      <h2>Welcome to Chat Room {{code}}</h2>
-      <div class="messages" id="messages"></div>
-      <div class="inputs">
-        <input
-          type="text"
-          rows="3"
-          placeholder="Message"
-          name="message"
-          id="message"
-        />
-        <button type="button" name="send" id="send-btn" onClick="sendMessage()">
-          Send
-        </button>
-      </div>
+  <!-- Top Bar with the name of the chat app -->
+  <div class="w3-top">
+    <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
+    <a href="/homepage" class="w3-bar-item w3-button w3-padding-16 w3-theme-d4"><i class="fa fa-home w3-margin-right"></i><b>DZ</b> Chattyverse</a>
+    </div>
     </div>
 
-    <script type="text/javascript">
-      var socketio = io();
+  <!-- Content of the chat room -->
+  <div class="content w3-container w3-display-middle">  
 
-      const messages = document.getElementById("messages");
+  <!-- Chat room box -->
+  <div class="message-box">
+    <h2>Chat Room: {{code}}</h2>
+    <div class="messages" id="messages"></div>
 
-      const createMessage = (name, msg) => {
-        const content = `
-        <div class="text">
-          <span>
-            <strong>${name}</strong>: ${msg}
-          </span>
-          <span class="muted">
-            ${new Date().toLocaleString()}
-          </span>
-        </div>
-        `;
-        messages.innerHTML += content;
-      };
+    <!-- Input field for entering messages -->
+    <div class="inputs">
+      <input
+        type="text"
+        rows="3"
+        placeholder="Message"
+        name="message"
+        id="message"
+      />
 
-      socketio.on("message", (data) => {
-        createMessage(data.name, data.message);
-      });
+      <!-- Button for sending messages -->
+      <button type="button" name="send" id="send-btn" onClick="sendMessage()">
+        Send
+      </button>
+    </div>
+  </div>
 
-      const sendMessage = () => {
-        const message = document.getElementById("message");
-        if (message.value == "") return;
-        socketio.emit("message", { data: message.value });
-        message.value = "";
-      };
-    </script>
+  <!-- JavaScript for handling chat messages -->
+  <script type="text/javascript">
+    // Initialize socket.io
+    var socketio = io();
 
-    {% for msg in messages %}
-    <script type="text/javascript">
-      createMessage("{{msg.name}}", "{{msg.message}}");
-    </script>
-    {% endfor %}
-    <!-- Actual Chat stuff ends here -->
+    // Getting the HTML element where messages will be displayed
+    const messages = document.getElementById("messages");
 
-    </div>    <!-- End of Content Div -->
+    // Function to create a new message
+    const createMessage = (name, msg) => {
+      const content = `
+      <div class="text">
+        <span>
+          <strong>${name}</strong>: ${msg}
+        </span>
+        <span class="muted">
+          ${new Date().toLocaleString()}
+        </span>
+      </div>
+      `;
+      // Adding the new message to the messages div
+      messages.innerHTML += content;
+    };
+
+    // Listening for incoming messages
+    socketio.on("message", (data) => {
+      createMessage(data.name, data.message);
+    });
+
+    // Function to send a new message
+    const sendMessage = () => {
+      const message = document.getElementById("message");
+      if (message.value == "") return;
+      socketio.emit("message", { data: message.value });
+      message.value = "";
+    };
+  </script>
+
+  <!-- Creating messages that are already in the chat room -->
+  {% for msg in messages %}
+  <script type="text/javascript">
+    createMessage("{{msg.name}}", "{{msg.message}}");
+  </script>
+  {% endfor %}
+
+  </div>    
 
 </body>
-<!-- Body ends here -->
+<!-- End of HTML Body -->
+
 </html>
