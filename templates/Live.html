@@ -1,0 +1,74 @@
+<html lang="en">
+<!-- Header starts here -->
+<head>
+    <title>ChattyVerse</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-dark-grey.css"> 
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style> html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif} </style>
+    <style>
+      .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: red;
+        color: white;
+        text-align: center;
+      }
+      </style>
+</head>
+<!-- Header ends here -->
+
+<!-- Beginning of body content -->
+<body class="w3-theme-l5">
+
+    <!-- The top navigation bar starts here -->
+    <div class="w3-top">
+        <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
+        <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
+        <a href="/homepage" class="w3-bar-item w3-button w3-padding-16 w3-theme-d4"><i class="fa fa-home w3-margin-right"></i><b>DZ</b> Chattyverse</a>
+        </div>
+        </div>
+    <!-- The top navigation bar ends here -->
+
+    <div class= "w3-left">
+    <div class="w3-panel w3-border w3-round-xlarge w3-border-dark-grey w3-display-middle"> <!-- Styling for the chat room form -->
+        <form method="post" class="buttons">
+            <h3>Enter The Chat Room</h3><!-- Title of the form -->
+            <div>
+                <label>Name:</label>    <!-- Section for user to enter their name starts here -->
+                <input
+                    type="text"
+                    placeholder="Pick a name!"
+                    name="name"
+                    value="{{name}}"
+                />
+            </div>  <!-- Section for user to enter their name ends here -->
+
+            <div class="join"> <!-- Section for user to join a room with a specific code starts here -->
+                <input type="text" placeholder="Room Code" name="code" value="{{code}}"/>
+                <button type="submit" name="join">Join a room</button>
+            </div> <!-- Section for user to join a room with a specific code ends here -->
+
+            <button type="submit" name="create" class="create-btn">Create a room</button> <!-- Button to create a new room -->
+
+            <!-- Error message displayed if there's an issue creating a room -->
+            {% if error %}
+            <ul>
+                <li>{{error}}</li>
+            </ul>
+            {% endif %}
+
+        </form>
+    </div>
+    </div>
+
+</body>
+<!-- End of body content -->
+
+</html>
